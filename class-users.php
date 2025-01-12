@@ -12,27 +12,39 @@ class Users implements AuthInterface, CRUDInterface
         $this->pdo = $connection;
     }
 
-    
     public function register(string $username, string $email, string $password): bool
     {
-        $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-        $stmt = $this->pdo->prepare("INSERT INTO users (username, email, password) VALUES (?, ?, ?)");
-        return $stmt->execute([$username, $email, $hashedPassword]);
-    }
-
-    public function login(string $email, string $password): bool
-    {
-        $stmt = $this->pdo->prepare("SELECT * FROM users WHERE email = ?");
-        $stmt->execute([$email]);
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if ($user && password_verify($password, $user['password'])) {
-            session_start();
-            $_SESSION['user'] = $user;
-            return true;
+        try {
+            $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+            $stmt = $this->pdo->prepare("INSERT INTO users (username, email, password, idrole) VALUES (?, ?, ?, ?)");
+            $idrole = 2; 
+            return $stmt->execute([$username, $email, $hashedPassword, $idrole]);
+        } catch (PDOException $e) {
+            echo "Error during registration: " . $e->getMessage();
+            return false;
         }
-        return false;
     }
+
+
+    public function login(string $email, string $password): ?array
+    {
+        try {
+            $stmt = $this->pdo->prepare("SELECT * FROM users WHERE email = :email");
+            $stmt->bindParam(':email', $email);
+            $stmt->execute();
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($user && password_verify($password, $user['password'])) {
+                return $user; 
+            } else {
+                return null; 
+            }
+        } catch (PDOException $e) {
+            echo "Login error: " . $e->getMessage();
+            return null;
+        }
+    }
+
 
     public function logout(): void
     {

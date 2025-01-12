@@ -14,23 +14,19 @@
 <body class="bg-gray-100">
 
      <!---------------- Navbar ------------------>
-    <nav class="bg-white shadow-md py-4 px-6 flex items-center justify-between">
+     <nav class="bg-white shadow-md py-4 px-6 flex items-center justify-between">
         <div class="text-2xl font-bold text-violet-600">BlogPlatform</div>
-
         <div class="flex gap-6 text-gray-700 font-bold">
-            <a href="./index.php" class="hover:text-violet-500 " >Home</a>
+            <a href="./index.php" class="hover:text-violet-500">Home</a>
             <a href="./tags.php" class="hover:text-violet-500">Tags</a>
             <a href="#" class="hover:text-violet-500">About</a>
             <a href="./my-articles.php" class="hover:text-violet-500">My Articles</a>
         </div>
-
-
         <div class="flex gap-4">
             <?php
             session_start();
             if (isset($_SESSION['username'])) {
-                echo '<span class="text-2xl font-bold text-violet-600 ">Welcome , ' . htmlspecialchars($_SESSION['username']) . '!</span>';
-                
+                echo '<span class="text-2xl font-bold text-violet-600">Welcome, ' . htmlspecialchars($_SESSION['username']) . '!</span>';
                 echo '<a href="./Authentification/logout.php" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">Logout</a>';
             } else {
                 echo '<a href="./Authentification/login.php" class="px-4 py-2 bg-violet-500 text-white rounded-lg hover:bg-violet-600">Login</a>';
@@ -38,8 +34,10 @@
             }
             ?>
         </div>
-
     </nav>
+
+
+
 
 
 
